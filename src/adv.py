@@ -65,11 +65,17 @@ while not choice == "q":
 
     choice = input("Which way?  ")
 
-    direction = directions[choice]
+    
+
+    if choice == "q":
+        print("\nThank you for playing!")
+    
+    else: 
+        try:
+            direction = directions[choice]
+            player.room = getattr(player.room, direction)
+            print(direction)
+        except AttributeError:
+            print(crayons.red("\nSorry you can't go that way\n"))
 
     
-    try:
-        player.room = getattr(player.room, direction)
-        print(direction)
-    except AttributeError:
-        print(crayons.red("\nSorry you can't go that way\n"))
