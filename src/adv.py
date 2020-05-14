@@ -1,5 +1,7 @@
 from room import Room
+from player import Player
 
+import crayons 
 # Declare all the rooms
 
 room = {
@@ -38,7 +40,12 @@ room['treasure'].s_to = room['narrow']
 #
 
 # Make a new player object that is currently in the 'outside' room.
-
+name = input('Enter your name: ')
+player = Player(name, room['outside'])
+print(player.room.description)
+choice = ""
+print(crayons.green(f'\n Welcome, {player.name}!\n'))
+ 
 # Write a loop that:
 #
 # * Prints the current room name
@@ -49,3 +56,20 @@ room['treasure'].s_to = room['narrow']
 # Print an error message if the movement isn't allowed.
 #
 # If the user enters "q", quit the game.
+
+directions = {'n': 'n_to', 's': 's_to', 'e': 'e_to', 'w': 'w_to'}
+
+while not choice == "q":
+    print(player.room.name)
+    print(player.room.description)
+
+    choice = input("Which way?  ")
+
+    direction = directions[choice]
+
+    
+    try:
+        player.room = getattr(player.room, direction)
+        print(direction)
+    except AttributeError:
+        print(crayons.red("\nSorry you can't go that way\n"))
