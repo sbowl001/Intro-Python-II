@@ -1,5 +1,6 @@
 from room import Room
 from player import Player
+from item import Item, Treasure 
 
 import crayons 
 # Declare all the rooms
@@ -35,15 +36,21 @@ room['narrow'].w_to = room['foyer']
 room['narrow'].n_to = room['treasure']
 room['treasure'].s_to = room['narrow']
 
+t = Item("goodie", "So shiny")
+room['outside'].items.append(t)
 #
 # Main
 #
-
+def find_item(name, currentRoom):
+    for item in player.room.items:
+        if item.name == name:
+            return item 
+    return None 
 # Make a new player object that is currently in the 'outside' room.
 name = input('Enter your name: ')
 player = Player(name, room['outside'])
 print(player.room.description)
-choice = ""
+
 print(crayons.green(f'\n Welcome, {player.name}!\n'))
  
 # Write a loop that:
@@ -59,23 +66,56 @@ print(crayons.green(f'\n Welcome, {player.name}!\n'))
 
 directions = {'n': 'n_to', 's': 's_to', 'e': 'e_to', 'w': 'w_to'}
 
-while not choice == "q":
+# choice = ""
+done = False 
+while not done:
     print(player.room.name)
     print(player.room.description)
-
-    choice = input("Which way?  ")
-
+    player.room.view_items()
     
 
-    if choice == "q":
-        print("\nThank you for playing!")
+    choice = input("Which way?  ").strip().split()
+    # choice = input("Which way?  ") 
     
-    else: 
-        try:
-            direction = directions[choice]
-            player.room = getattr(player.room, direction)
-            print(direction)
-        except AttributeError:
-            print(crayons.red("\nSorry you can't go that way\n"))
+    if len(choice) > 2 or len(choice) < 1:
+        print("I don't understand that")
+        continue 
+    if len(choice) == 1:
+        if choice[0] == "q":
+            print("\nThank you for playing!")
+            done = True 
+        elif choice[0] in ["n", "s", "w", "e"]: 
+            try:
+                direction = directions[choice[0]]
+                player.room = getattr(player.room, direction)
+                print(direction)
+            except AttributeError:
+                 print(crayons.red("\nSorry you can't go that way\n"))
+        else: 
+            print("Unknown command")
+    elif len(choice) == 2:
+        if choice[0] == 'get' or choice[0] == 'take':
+            item = find_item(choice[1], player.room)
+            if item == None: 
+                print("I don't see that here")
+            else: 
+                item.on_picked_item(player)
+                player.get(item)
+                print(crayons.yellow(player.items[0].name))
+                print(f"{item} taken")
+        elif choice[0] == 'drop':
+            item = find_item(choice[1], player)
+            print(item)
+            if item == None:
+                print("You are not carrying that")
+                print(crayons.yellow(player.items[0].name))
+            else: 
+                # player.drop(item)
+                player.items.remove(item)
+                player.room.items.append(item)
+       
+                print(f"{item} dropped")
+        else: 
+            print("Unknown command")
 
     
