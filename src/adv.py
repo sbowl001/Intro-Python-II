@@ -42,6 +42,7 @@ room['outside'].items.append(t)
 # Main
 #
 def find_item(name, currentRoom):
+
     for item in player.room.items:
         if item.name == name:
             return item 
@@ -74,7 +75,7 @@ while not done:
     player.room.view_items()
     
 
-    choice = input("Which way?  ").strip().split()
+    choice = input("Please enter a command or ? for help.   ").strip().split()
     # choice = input("Which way?  ") 
     
     if len(choice) > 2 or len(choice) < 1:
@@ -90,11 +91,17 @@ while not done:
                 player.room = getattr(player.room, direction)
                 print(direction)
             except AttributeError:
-                 print(crayons.red("\nSorry you can't go that way\n"))
+                print(crayons.red("\nSorry you can't go that way\n"))
+        elif choice[0] == "i" or choice[0] == "inventory":
+            print(crayons.blue("Inventory: "))
+            if len(player.items) == 0:
+                print("\tempty")
+            for i in player.items: 
+                print("\t "+ str(i))
         else: 
             print("Unknown command")
     elif len(choice) == 2:
-        if choice[0] == 'get' or choice[0] == 'take':
+        if choice[0] == 'grab' or choice[0] == 'take':
             item = find_item(choice[1], player.room)
             if item == None: 
                 print("I don't see that here")
@@ -104,17 +111,17 @@ while not done:
                 print(crayons.yellow(player.items[0].name))
                 print(f"{item} taken")
         elif choice[0] == 'drop':
-            item = find_item(choice[1], player)
-            print(item)
-            if item == None:
-                print("You are not carrying that")
-                print(crayons.yellow(player.items[0].name))
-            else: 
-                # player.drop(item)
-                player.items.remove(item)
-                player.room.items.append(item)
-       
-                print(f"{item} dropped")
+            for i in player.items: 
+                if choice[1] == i.name: 
+                    i.drop(player)
+            # item = find_item(choice[1], player)
+            # print(crayons.red(item))
+            # if item == None:
+            #     print("You are not carrying that")
+            #     print(crayons.yellow(player.items[0].name))
+            # else: 
+            #     item.drop(player)
+            #     print(f"{item} dropped")''''''
         else: 
             print("Unknown command")
 

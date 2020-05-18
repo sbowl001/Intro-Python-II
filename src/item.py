@@ -11,6 +11,12 @@ class Item:
     def __str__(self):
         return self.name + ": " + self.description
 
+    def drop(self, player):
+        print("...Gone!")
+        player.room.items.append(self)
+        player.items.remove(self)
+        # item.on_drop()
+
 
 class Treasure(Item):
     def __init__(self, name, description, value):

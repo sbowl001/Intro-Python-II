@@ -17,7 +17,8 @@ class Player:
         self.room.items.remove(item)
         
 
-    def drop(self, item):
-        self.room.items.append(item)
-        self.items.remove(item)
-        # item.on_drop()
+    # def drop(self, item):
+    #     print("...Gone!")
+    #     self.room.items.append(item)
+    #     self.items.remove(item)
+    #     # item.on_drop()
