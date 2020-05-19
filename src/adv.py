@@ -41,9 +41,9 @@ room['outside'].items.append(t)
 #
 # Main
 #
-def find_item(name, currentRoom):
+def find_item(name, location):
 
-    for item in player.room.items:
+    for item in location.items:
         if item.name == name:
             return item 
     return None 
@@ -111,17 +111,17 @@ while not done:
                 print(crayons.yellow(player.items[0].name))
                 print(f"{item} taken")
         elif choice[0] == 'drop':
-            for i in player.items: 
-                if choice[1] == i.name: 
-                    i.drop(player)
-            # item = find_item(choice[1], player)
-            # print(crayons.red(item))
-            # if item == None:
-            #     print("You are not carrying that")
-            #     print(crayons.yellow(player.items[0].name))
-            # else: 
-            #     item.drop(player)
-            #     print(f"{item} dropped")''''''
+            # for i in player.items: 
+            #     if choice[1] == i.name: 
+            #         i.drop(player)
+            item = find_item(choice[1], player)
+            print(crayons.red(item))
+            if item == None:
+                print("You are not carrying that")
+                # print(crayons.yellow(player.items[0].name))
+            else: 
+                item.drop(player)
+                print(f"{item} dropped") 
         else: 
             print("Unknown command")
 
